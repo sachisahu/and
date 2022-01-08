@@ -1,0 +1,52 @@
+package com.sachi.sharedpreference;
+
+import androidx.appcompat.app.AppCompatActivity;
+
+import android.content.Context;
+import android.content.SharedPreferences;
+import android.os.Bundle;
+import android.view.View;
+import android.widget.Button;
+
+public class MainActivity extends AppCompatActivity {
+
+    Button loginButton;
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_main);
+        loginButton = findViewById(R.id.btnLogin);
+
+        sharedPreference();
+        loginButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                checkSharedPreference();
+            }
+        });
+    }
+
+    private void checkSharedPreference() {
+        SharedPreferences sharedPreferences = this.getPreferences(Context.MODE_PRIVATE);
+        SharedPreferences.Editor edit = sharedPreferences.edit();
+        if(loginButton.getText().toString() == "Login"){
+            edit.putString("btnStatus","Logout");
+            loginButton.setText("Logout");
+        }
+        else {
+            edit.putString("btnStatus","Login");
+            loginButton.setText("Login");
+        }
+        edit.apply();
+    }
+
+    private void sharedPreference() {
+        SharedPreferences sharedPreferences = this.getPreferences(Context.MODE_PRIVATE);
+        String flag = sharedPreferences.getString("btnStatus","");
+        if(flag == ""){
+            loginButton.setText("Login");
+        }else {
+            loginButton.setText(flag);
+        }
+    }
+}
