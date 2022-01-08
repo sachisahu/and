@@ -7,15 +7,20 @@ import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
+import android.widget.TextView;
 
 public class MainActivity extends AppCompatActivity {
 
     Button loginButton;
+    TextView txtCount;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         loginButton = findViewById(R.id.btnLogin);
+        txtCount = findViewById(R.id.txtCount);
+
+        timesDataOpened();
 
         sharedPreference();
         loginButton.setOnClickListener(new View.OnClickListener() {
@@ -24,6 +29,19 @@ public class MainActivity extends AppCompatActivity {
                 checkSharedPreference();
             }
         });
+    }
+
+    private void timesDataOpened() {
+
+        SharedPreferences sharedPreferences = this.getPreferences(Context.MODE_PRIVATE);
+        SharedPreferences.Editor edit = sharedPreferences.edit();
+        int count = sharedPreferences.getInt("opened",0);
+        edit.putInt("opened",count + 1);
+        edit.apply();
+        txtCount.setText(count+"");
+
+
+
     }
 
     private void checkSharedPreference() {
@@ -43,6 +61,7 @@ public class MainActivity extends AppCompatActivity {
     private void sharedPreference() {
         SharedPreferences sharedPreferences = this.getPreferences(Context.MODE_PRIVATE);
         String flag = sharedPreferences.getString("btnStatus","");
+
         if(flag == ""){
             loginButton.setText("Login");
         }else {
